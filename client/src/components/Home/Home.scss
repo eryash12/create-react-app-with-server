@@ -1,0 +1,50 @@
+$header-height: 50px;
+.home {
+  min-height: 100vh;
+  min-width: 100vw;
+  background-color: #fafafa;
+  font-family: 'Open Sans', sans-serif;
+
+  .header {
+    height: $header-height;
+    display: flex;
+    align-items: center;
+    background: #333;
+    color: #fff;
+    border-radius: 0;
+  }
+
+  .intials-box {
+    margin-left: 10px;
+    border: 2px solid #fff;
+    border-radius: 4px;
+    padding: 5px;
+    margin-right: 10px;
+    font-weight: bold;
+  }
+
+  .canvas {
+    display: flex;
+    flex-flow: column nowrap;
+  }
+
+  .fields {
+    display: flex;
+    flex-flow: column;
+  }
+
+  .full {
+    margin-bottom: 10px;
+  }
+
+  .submit-btn {
+    max-width: 40px;
+    margin-top: 20px;
+  }
+
+  .step-content {
+    > div {
+      overflow: visible;
+    }
+  }
+}
