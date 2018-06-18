@@ -7,7 +7,11 @@ app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 const port = process.env.SERVER_PORT || 5000;
 
-app.use(‘/’, express.static(`${__dirname}/client/build`));
+app.use(express.static(path.join(__dirname, 'client/build')));
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname+'/client/build/index.html'));
+});
 
 app.post('/api/rent_zestimate', async (req, res) => {
   try{

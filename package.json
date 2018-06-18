@@ -10,7 +10,8 @@
   "dependencies": {
     "body-parser": "^1.18.3",
     "express": "^4.16.2",
-    "node-zillow": "^1.0.1"
+    "node-zillow": "^1.0.1",
+    "path": "^0.12.7"
   },
   "devDependencies": {
     "concurrently": "^3.5.1"
