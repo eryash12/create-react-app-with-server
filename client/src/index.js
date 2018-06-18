@@ -8,11 +8,19 @@ import { Provider } from 'react-redux';
 import combinedReducers from './reducers';
 import thunkMiddleware from 'redux-thunk';
 
-const storeMiddleWares = compose(
+const composeEnhancers =
+  typeof window === 'object' &&
+  window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ?
+    window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
+      // Specify extension’s options like name, actionsBlacklist, actionsCreators, serialize...
+    }) : compose;
+
+const enhancer = composeEnhancers(
   applyMiddleware(thunkMiddleware),
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+  // other store enhancers if any
 );
-const store = createStore(combinedReducers, {}, storeMiddleWares);
+
+const store = createStore(combinedReducers, {}, enhancer);
 
 ReactDOM.render(
   <Provider store={store}><App /></Provider>,

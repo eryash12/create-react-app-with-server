@@ -9,6 +9,17 @@ import { reduxForm, Field, formValueSelector } from 'redux-form';
 import { TextField } from 'redux-form-material-ui';
 import { required, phone, email } from '../../utils/validations';
 import AddressAutocomplete from '../AddressAutocomplete';
+import numbro from 'numbro';
+
+export const calcRentZestimate = (zestimate) => {
+  const calcRentZestimate = (0.05 * parseInt(zestimate, 10))/12;
+  const lowerRange = 0.90 * calcRentZestimate;
+  const upperRange = 1.1 * calcRentZestimate;
+  return { upperRange, lowerRange };
+};
+
+export const formatCurrency = amt => numbro(parseInt(amt, 10)).formatCurrency({ mantissa: 2, thousandSeparated: true });
+
 
 class Form extends React.Component {
   constructor(props) {
@@ -17,6 +28,19 @@ class Form extends React.Component {
       activeStep: 0,
     }
   }
+
+  submitBtn = (props, text) => (
+    <Button
+      className="submit-btn"
+      variant="contained"
+      color="primary"
+      {
+        ...props
+      }
+    >
+      {text}
+    </Button>
+  )
 
   renderPersonalDetails = () => {
     const { invalid, submitting, pristine, handleSubmit, onSubmitPersonalDetails } = this.props;
@@ -27,28 +51,54 @@ class Form extends React.Component {
         <Field className="full" name="lastName" component={TextField} label="Last Name" validate={[required]}/>
         <Field className="full" name="phone" type="number" component={TextField} label="Phone" validate={[required, phone]}/>
         <Field className="full" name="email" component={TextField} label="Email" validate={[required, email]}/>
-        <Button
-          className="submit-btn"
-          variant="contained"
-          color="primary"
-          onClick={onClick}
-          disabled={invalid || submitting || pristine}
-        >
-          Next
-        </Button>
+        {this.submitBtn({ disabled: invalid || submitting || pristine, onClick }, 'Next')}
       </form>
     )
   }
 
+  renderZestimate = (zestimate, rentZestimate) => {
+    if (!zestimate && !rentZestimate) return;
+    if(!rentZestimate) {
+      const { upperRange, lowerRange } = calcRentZestimate(zestimate);
+      return(
+        <div className="rent-zestimate">
+            Congratulations! based on the address you entered we were able to identify your rent zestimate as
+            {' '}<b>{formatCurrency(lowerRange)}</b> to <b>{formatCurrency(upperRange)}</b> approximately per month
+        </div>
+      )
+    }
+    return(
+      <div className="rent-zestimate">
+        Congratulations! based on the address you entered we were able to identify your rent zestimate as <b>{formatCurrency(rentZestimate)}</b>
+      </div>
+    );
+  }
+
   renderAddress = () => {
+    const { user: { address = {} } } = this.props;
+    const onClick = () => this.setState({activeStep: 2});
     return (
       <div>
         <AddressAutocomplete onAddressSelect={this.props.onAddressSelect} />
+        { this.renderZestimate(address.zestimate, address.rentZestimate) }
+        { this.submitBtn({disabled: !(address.zestimate || address.rentZestimate), onClick}, 'Next')}
       </div>
     );
   };
 
-  renderRent = () => ({});
+  renderRent = () => {
+    const { user: { address = {} }, invalid, submitting, pristine, handleSubmit, onSubmitExpectedRent } = this.props;
+    const onClick = handleSubmit(() => this.setState({ activeStep: 3}, onSubmitExpectedRent()));
+    return (
+      <div>
+        Please enter the rent you expect for your home located at <b>{ address.formatted }</b>
+        <form className="fields">
+          <Field className="full" name="expectedRent" type="number" component={TextField} label="Expected Rent" validate={[required]}/>
+          { this.submitBtn({ disabled: invalid || submitting || pristine, onClick }, 'save')}
+        </form>
+      </div>
+    )
+  };
 
   steps = () => (
     [
@@ -61,7 +111,7 @@ class Form extends React.Component {
         content: this.renderAddress,
       },
       {
-        label: 'Rent',
+        label: 'Asking Rent',
         content: this.renderRent,
       }
     ]
@@ -70,7 +120,7 @@ class Form extends React.Component {
   render() {
     const { activeStep } = this.state;
     return (
-      <Stepper activeStep={1} orientation="vertical">
+      <Stepper activeStep={activeStep} orientation="vertical">
         {
           this.steps().map((step, index) => (
             <Step key={step.label}>
@@ -100,6 +150,13 @@ export default connect((state) => ({
     const state = getState();
     dispatch({ type: 'set user', user: { ...selector(state, 'firstName', 'lastName', 'phone', 'email') }});
   }),
+  onSubmitExpectedRent: () => dispatch((dispatch, getState) => {
+    const state = getState();
+    dispatch({ type: 'set user', user: { expectedRent: selector(state, 'expectedRent') }});
+    const existingItems = JSON.parse(localStorage.getItem('searches')) || [];
+    existingItems.push(getState().user);
+    localStorage.setItem('searches', JSON.stringify(existingItems));
+  }),
   onAddressSelect: async addressNode => {
     const addressComponents = addressNode['address_components'];
     const address = { formatted: addressNode.formatted_address };
@@ -118,6 +175,24 @@ export default connect((state) => ({
         }
       }
     );
+    const url = '/api/rent_zestimate';
+    const response = await fetch(url,
+      {
+        body: JSON.stringify({ address }),
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+    if (response.status !== 200) {
+      dispatch({type: 'set user', user: { address: {} }});
+      return false;
+    };
+    const body = await response.json();
+    address['rentZestimate'] = body.rentZestimateAmount;
+    address['zestimate'] = body.zestimateAmount;
     dispatch({type: 'set user', user: { address }});
+    return true;
   }
 }))(reduxFormBound);
