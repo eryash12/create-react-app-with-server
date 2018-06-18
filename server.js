@@ -5,7 +5,9 @@ const bodyParser = require('body-parser');
 const app = express();
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
-const port = process.env.PORT || 5000;
+const port = process.env.SERVER_PORT || 5000;
+
+app.use(‘/’, express.static(`${__dirname}/client/build`));
 
 app.post('/api/rent_zestimate', async (req, res) => {
   try{
