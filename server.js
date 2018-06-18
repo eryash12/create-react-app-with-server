@@ -1,6 +1,7 @@
 const express = require('express');
 const Zillow = require('node-zillow');
 const bodyParser = require('body-parser');
+const path = require('path');
 
 const app = express();
 app.use(bodyParser.json()); // support json encoded bodies
