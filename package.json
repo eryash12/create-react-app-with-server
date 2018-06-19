@@ -8,7 +8,9 @@
     "heroku-postbuild": "cd client && yarn && yarn run build"
   },
   "dependencies": {
+    "@sendgrid/mail": "^6.3.1",
     "body-parser": "^1.18.3",
+    "dotenv": "^6.0.0",
     "express": "^4.16.2",
     "node-zillow": "^1.0.1",
     "path": "^0.12.7"

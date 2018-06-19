@@ -88,7 +88,7 @@ class Form extends React.Component {
 
   renderRent = () => {
     const { user: { address = {} }, invalid, submitting, pristine, handleSubmit, onSubmitExpectedRent } = this.props;
-    const onClick = handleSubmit(() => this.setState({ activeStep: 3}, onSubmitExpectedRent()));
+    const onClick = handleSubmit(() => this.setState({ activeStep: 3}, onSubmitExpectedRent));
     return (
       <div>
         Please enter the rent you expect for your home located at <b>{ address.formatted }</b>
@@ -120,18 +120,20 @@ class Form extends React.Component {
   render() {
     const { activeStep } = this.state;
     return (
-      <Stepper activeStep={activeStep} orientation="vertical">
-        {
-          this.steps().map((step, index) => (
-            <Step key={step.label}>
-              <StepLabel>{step.label}</StepLabel>
-              <StepContent className="step-content">
-                {step.content()}
-              </StepContent>
-            </Step>
-          ))
-        }
-      </Stepper>
+      <div className="form-container">
+        <Stepper activeStep={activeStep} orientation="vertical">
+          {
+            this.steps().map((step, index) => (
+              <Step key={step.label}>
+                <StepLabel>{step.label}</StepLabel>
+                <StepContent className="step-content">
+                  {step.content()}
+                </StepContent>
+              </Step>
+            ))
+          }
+        </Stepper>
+      </div>
     );
   }
 }
@@ -150,12 +152,32 @@ export default connect((state) => ({
     const state = getState();
     dispatch({ type: 'set user', user: { ...selector(state, 'firstName', 'lastName', 'phone', 'email') }});
   }),
-  onSubmitExpectedRent: () => dispatch((dispatch, getState) => {
+  onSubmitExpectedRent: () => dispatch(async (dispatch, getState) => {
     const state = getState();
-    dispatch({ type: 'set user', user: { expectedRent: selector(state, 'expectedRent') }});
+    const user = state.user;
+    user['expectedRent'] = selector(state, 'expectedRent');
     const existingItems = JSON.parse(localStorage.getItem('searches')) || [];
     existingItems.push(getState().user);
     localStorage.setItem('searches', JSON.stringify(existingItems));
+    const url = '/api/notify_user';
+    let formattedRent = '';
+    if (user.address.rentZestimate) {
+      formattedRent = formatCurrency(user.address.rentZestimate);
+    } else {
+      const { lowerRange, upperRange } = calcRentZestimate(user.address.zestimate);
+      formattedRent = `${formatCurrency(lowerRange)} - ${formatCurrency(upperRange)}`;
+    }
+    const response = await fetch(url,
+      {
+        body: JSON.stringify({ user, formattedRent }),
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+    dispatch({ type: 'set user', user});
+    return response.status;
   }),
   onAddressSelect: async addressNode => {
     const addressComponents = addressNode['address_components'];

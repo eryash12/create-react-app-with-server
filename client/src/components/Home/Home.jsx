@@ -4,6 +4,7 @@ import Paper from '@material-ui/core/Paper';
 import { connect } from 'react-redux';
 import Form from './Form';
 import History from './History';
+import Instructions from './Instructions';
 
 class Home extends React.Component {
   render() {
@@ -17,17 +18,16 @@ class Home extends React.Component {
           <div className="full-name">Yash Tamakuwala</div>
         </Paper>
         <div className="canvas">
+          <Paper className="grid-div">
+            <Instructions />
+          </Paper>
+          {historyItems.length > 0 &&
+          <Paper className="grid-div history-items-div">
+            <History items={historyItems} user={this.props.user}/>
+          </Paper>
+          }
           <Paper className="grid-div form-div">
             <Form />
-          </Paper>
-          <Paper className="grid-div">
-            <History items={historyItems}/>
-          </Paper>
-          <Paper className="grid-div form-div">
-            3
-          </Paper>
-          <Paper className="grid-div form-div">
-            4
           </Paper>
         </div>
       </div>
@@ -36,7 +36,7 @@ class Home extends React.Component {
 };
 
 export default connect((state) => ({
-
+  user: state.user,
 }), (dispatch) => ({
 
 }))(Home);

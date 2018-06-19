@@ -10,7 +10,7 @@ import { calcRentZestimate, formatCurrency } from './Form';
 
 export default ({items = []}) => (
   <div className="history-div">
-    <div className="prev-search">Previous Searches</div>
+    <div className="text-headline">Previous Searches</div>
     {items.map(item => renderItem(item))}
   </div>
 )
