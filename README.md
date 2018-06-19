@@ -22,4 +22,4 @@ then run `cd client` and `yarn install` this will setup your client.
 
 Once that is complete checkout to root and run `yarn dev` at this point your client will run at :3000 and server at :5000
 
-Hot reloading is enabled which will autolaunch your browser for :3000
+Hot reloading is enabled which will autolaunch your browser for :3000, Refer to how-to-use.txt for usage instructions.

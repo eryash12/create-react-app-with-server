@@ -1,0 +1,18 @@
+The app is designed keeping in mind mobile first design. So it looks better on a mobile viewport :P.
+The only responsive breakpoint is ipad viewport which is 768px.
+Some of the addresses I have tested and the app works well on are
+
+1) 468 Kansas Street, San Francisco, CA, USA (gives Rent zestimate)
+2) 810 Buchanan Street, San Francisco, CA, USA(calculates Rent zestimate from zestimate)
+3) 10675 Baxter Ave, Los Altos, CA (gives Rent zestimate)
+4) 1 Bluxome St, San Francisco, CA (gives Rent zestimate)
+
+This app might not work well for addresses with a street2(apt no/suite no) since google autocomplete doesn't support it and it was adding more scope.
+
+Also the overall work on this app was in between 24-36 dev hours, this includes dev setup, feature build and deployment to heroku.
+
+This app is deployed on a live env to heroku on https://yt-rent-estimate.herokuapp.com
+
+Also I had to deviate the layout on desktop viewport from the one given in requirements because i thought this was a better UX keeping in mind my design.
+
+Please let me know if I can answer any other questions.
