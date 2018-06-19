@@ -1,13 +1,19 @@
-Installation instructions for this app
+<b>About this application</b>
 
-PreRequisites for this app are `node, yarn( or npm), git, concurrently`
+This app is a full stack nodejs app with the a react-redux SPA created with create-react-app and a thin express.js server layer.
+
+All the code pertaining to the client is in `client/src` and for server is in `server.js`
+
+<b>Installation instructions for this app</b>
+
+PreRequisites for this app are `node, yarn( or npm)`
 
 Once you clone the repo you will need to supply 2 env variables via a .env file or your bash in your root.
 
-`
-SENDGRID_API_KEY=YOUR API KEY
-ZILLOW_API=YOUR API KEY
-`
+
+`SENDGRID_API_KEY=YOUR API KEY`
+`ZILLOW_API=YOUR API KEY`
+
 SENDGRID_API_KEY is required for email to work and ZILLOW_API is required for Zillow API to work
 
 Once you are in the root directory run `yarn install`. This will setup your server dependencies.
