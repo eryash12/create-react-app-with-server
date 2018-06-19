@@ -25,13 +25,13 @@ const renderItem = (item) => (
     </ExpansionPanelSummary>
     <ExpansionPanelDetails>
       <Typography>
-        <div className="rent-zestimate">Rent Zestimate is <b>{getRentZestimate(item)}</b></div>
-        <div className="expected-rent">Expected rent for the property is <b>{formatCurrency(item.expectedRent)}</b></div>
-        <div className="personal-info">
-          <div className="name"><b>{item.firstName} {item.lastName}</b></div>
-          <div className="phone"><PhoneIcon /><span style={iconTextStyles}>{item.phone}</span></div>
-          <div className="mail"><MailIcon /><span style={iconTextStyles}>{item.email}</span></div>
-        </div>
+        <p className="rent-zestimate">Rent Zestimate is <span className="highlight-color">{getRentZestimate(item)}</span></p>
+        <p className="expected-rent">Expected rent for the property is <span className="highlight-color">{formatCurrency(item.expectedRent)}</span></p>
+        <p className="personal-info">
+          <p className="name"><span className="highlight-color">{item.firstName} {item.lastName}</span></p>
+          <p className="phone"><PhoneIcon className="highlight-color" /><span style={iconTextStyles}>{item.phone}</span></p>
+          <p className="mail"><MailIcon className="highlight-color" /><span style={iconTextStyles}>{item.email}</span></p>
+        </p>
       </Typography>
     </ExpansionPanelDetails>
   </ExpansionPanel>
@@ -42,6 +42,6 @@ const getRentZestimate = (item) => {
     return <span>{formatCurrency(item.address.rentZestimate)}</span>;
   } else {
     const {lowerRange, upperRange} = calcRentZestimate(item.address.zestimate);
-    return <span>{formatCurrency(lowerRange) - formatCurrency(upperRange)}</span>;
+    return <span>{formatCurrency(lowerRange)} - {formatCurrency(upperRange)}</span>;
   }
 }

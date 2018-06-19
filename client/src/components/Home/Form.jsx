@@ -10,6 +10,7 @@ import { TextField } from 'redux-form-material-ui';
 import { required, phone, email } from '../../utils/validations';
 import AddressAutocomplete from '../AddressAutocomplete';
 import numbro from 'numbro';
+import { fetchPost } from '../../utils/fetch';
 
 export const calcRentZestimate = (zestimate) => {
   const calcRentZestimate = (0.05 * parseInt(zestimate, 10))/12;
@@ -49,7 +50,7 @@ class Form extends React.Component {
       <form className="fields" onSubmit={onClick}>
         <Field className="full" name="firstName" component={TextField} label="First Name" validate={[required]}/>
         <Field className="full" name="lastName" component={TextField} label="Last Name" validate={[required]}/>
-        <Field className="full" name="phone" type="number" component={TextField} label="Phone" validate={[required, phone]}/>
+        <Field className="full" name="phone" type="tel" component={TextField} label="Phone" validate={[required, phone]}/>
         <Field className="full" name="email" component={TextField} label="Email" validate={[required, email]}/>
         {this.submitBtn({ disabled: invalid || submitting || pristine, onClick }, 'Next')}
       </form>
@@ -167,15 +168,7 @@ export default connect((state) => ({
       const { lowerRange, upperRange } = calcRentZestimate(user.address.zestimate);
       formattedRent = `${formatCurrency(lowerRange)} - ${formatCurrency(upperRange)}`;
     }
-    const response = await fetch(url,
-      {
-        body: JSON.stringify({ user, formattedRent }),
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      }
-    );
+    const response = await fetchPost({ url, body: {user, formattedRent}});
     dispatch({ type: 'set user', user});
     return response.status;
   }),
@@ -198,15 +191,7 @@ export default connect((state) => ({
       }
     );
     const url = '/api/rent_zestimate';
-    const response = await fetch(url,
-      {
-        body: JSON.stringify({ address }),
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      }
-    );
+    const response = await fetchPost({ url, body: { address }});
     if (response.status !== 200) {
       dispatch({type: 'set user', user: { address: {} }});
       return false;

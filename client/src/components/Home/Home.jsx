@@ -18,7 +18,7 @@ class Home extends React.Component {
           <div className="full-name">Yash Tamakuwala</div>
         </Paper>
         <div className="canvas">
-          <Paper className="grid-div">
+          <Paper className="grid-div instructions-div">
             <Instructions />
           </Paper>
           {historyItems.length > 0 &&

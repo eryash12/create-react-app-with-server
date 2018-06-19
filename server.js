@@ -35,10 +35,10 @@ app.post('/api/rent_zestimate', async (req, res) => {
       let zestimateAmount, rentZestimateAmount;
       if (rentZestimate) rentZestimateAmount = rentZestimate[0]['amount'][0]['_'];
       if (zestimate) zestimateAmount = zestimate[0]['amount'][0]['_'];
-      if(!(rentZestimate || zestimateAmount)) return res.sendStatus(400);
+      if(!(rentZestimate || zestimateAmount)) return res.status(400).json({response});
       return res.status(200).json({ zestimateAmount, rentZestimateAmount });
     }
-    return res.sendStatus(400);
+    return res.status(400).json({response}); // Shouldnt send back the response but is easier to debug and see if rent zestimate is available 
   } catch(err) {
     res.status(500).json({ err: err.message });
   }
