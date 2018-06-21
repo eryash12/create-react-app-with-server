@@ -9,15 +9,21 @@
   &:last-of-type {
     border-bottom: 0.5px solid #EDEDED;
   }
-  input {
-    font-size: 16px;
-    margin-left: 15px;
-    max-width: 70%;
-    background-color: transparent;
-    border: 0px solid;
-    outline: none;
-    &::placeholder {
-      color: #CCCCCC;
+  .text-field-img {
+
+  }
+  .text-field-input {
+    flex: 2;
+    input {
+      width:  calc(100% - 20px);
+      font-size: 16px;
+      margin-left: 15px;
+      background-color: transparent;
+      border: 0px solid;
+      outline: none;
+      &::placeholder {
+        color: #CCCCCC;
+      }
     }
   }
 }

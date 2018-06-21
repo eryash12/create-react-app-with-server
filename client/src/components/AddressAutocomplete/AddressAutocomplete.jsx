@@ -1,6 +1,6 @@
 import React from 'react';
 import PlacesAutocomplete, { geocodeByAddress } from 'react-places-autocomplete';
-import TextField from '@material-ui/core/TextField';
+import TextField from './../TextField';
 import './AddressAutocomplete.css';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -36,9 +36,10 @@ class AddressAutocomplete extends React.Component {
               <TextField
                 className = "address-input"
                 error={state.error !== ''}
+                reduxForm={false}
                 helperText={state.error}
                 {...getInputProps({
-                  placeholder: 'Address',
+                  placeholder: 'Search for Address',
                 })}
               />
                 {suggestions.length > 0 &&

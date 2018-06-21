@@ -6,11 +6,11 @@ import TextField from '../TextField/TextField';
 import { required, phone, email } from '../../utils/validations';
 import AddressAutocomplete from '../AddressAutocomplete';
 import numbro from 'numbro';
-import { fetchPost } from '../../utils/fetch';
 import phoneImg from './img/phone.png';
 import emailImg from './img/email.png';
 import firstnameImg from './img/firstname.png';
 import passwordImg from './img/password.png';
+import successImg from './img/success.svg';
 
 export const calcRentZestimate = (zestimate) => {
   const calcRentZestimate = (0.05 * parseInt(zestimate, 10))/12;
@@ -52,12 +52,12 @@ class Form extends React.Component {
       <div>
         <form className="fields" onSubmit={onClick}>
           <div className="full split">
-            <Field img={this.imgWrap(firstnameImg)} className="full" name="firstName" component={TextField} placeholder="First name" validate={[required]}/>
-            <Field className="full" name="lastName" component={TextField} placeholder="Last name" validate={[required]}/>
+            <TextField img={this.imgWrap(firstnameImg)} className="full" name="firstName" placeholder="First name" validate={[required]}/>
+            <TextField className="full" name="lastName" placeholder="Last name" validate={[required]}/>
           </div>
-          <Field img={this.imgWrap(emailImg)} className="full" name="email" component={TextField} placeholder="Email" validate={[required, email]}/>
-          <Field img={this.imgWrap(passwordImg)} className="full" name="password" type="password" component={TextField} placeholder="Password" validate={[required, email]}/>
-          <Field img={this.imgWrap(phoneImg)} className="full" name="phone" type="tel" component={TextField} placeholder="Phone number" validate={[required, phone]}/>
+          <TextField img={this.imgWrap(emailImg)} className="full" name="email" placeholder="Email" validate={[required, email]}/>
+          <TextField img={this.imgWrap(passwordImg)} className="full" name="password" type="password" placeholder="Password" validate={[required, email]}/>
+          <TextField img={this.imgWrap(phoneImg)} className="full" name="phone" type="tel" placeholder="Phone number" validate={[required, phone]}/>
           {/* {this.submitBtn({ disabled: invalid || submitting || pristine, onClick }, 'Next')} */}
         </form>
         <div className="terms-and-conditions">
@@ -91,22 +91,23 @@ class Form extends React.Component {
     return (
       <div>
         <AddressAutocomplete onAddressSelect={this.props.onAddressSelect} />
-        { this.renderZestimate(address.zestimate, address.rentZestimate) }
-        { this.submitBtn({disabled: !(address.zestimate || address.rentZestimate), onClick}, 'Next')}
       </div>
     );
   };
 
   renderRent = () => {
-    const { user: { address = {} }, invalid, submitting, pristine, handleSubmit, onSubmitExpectedRent } = this.props;
-    const onClick = handleSubmit(() => this.setState({ activeStep: 3}, onSubmitExpectedRent));
+    const { user: {address: {rentZestimate, zestimate}} } = this.props;
     return (
-      <div>
-        Please enter the rent you expect for your home located at <b>{ address.formatted }</b>
-        <form className="fields">
-          <Field className="full" name="expectedRent" type="number" component={TextField} label="Expected Rent" validate={[required]}/>
-          { this.submitBtn({ disabled: invalid || submitting || pristine, onClick }, 'save')}
+      <div className="expected-rent">
+        <img className="er-image" src={successImg} />
+        <div className="er-headline">Found your place!</div>
+        <div className="er-desc">Here’s the estimate rate you’ll get for your property monthy guaranteed</div>
+        <div className="er-currency">{formatCurrency(rentZestimate) || `${calcRentZestimate(zestimate).lowerRange} - ${calcRentZestimate(zestimate).upperRange}`}</div>
+        <div className="er-text2">Do you expect a different amount? We’ll try to make it happen</div>
+        <form className="er-form">
+          <Field className="er-input" name="expectedRent" type="number" component="input" label="Expected Rent" placeholder="$5800"/>
         </form>
+        <div className="seperator" />
       </div>
     )
   };
@@ -117,14 +118,13 @@ class Form extends React.Component {
     if (step === 'personalDetails') {
       return this.renderPersonalDetails();
     } else if(step === 'address') {
-      return this.renderAddres();
+      return this.renderAddress();
     } else {
       return this.renderRent();
     }
   };
 
   render() {
-    const { activeStep } = this.state;
     return (
       <div>
           {this.steps()}
@@ -137,63 +137,8 @@ const reduxFormBound = reduxForm({
   form: 'detailsForm',
 }) (Form);
 
-const selector = formValueSelector('detailsForm');
-
 export default connect((state) => ({
   user: state.user,
 }),
 (dispatch) => ({
-  onSubmitPersonalDetails: () => dispatch((dispatch, getState) => {
-    const state = getState();
-    dispatch({ type: 'set user', user: { ...selector(state, 'firstName', 'lastName', 'phone', 'email') }});
-  }),
-  onSubmitExpectedRent: () => dispatch(async (dispatch, getState) => {
-    const state = getState();
-    const user = state.user;
-    user['expectedRent'] = selector(state, 'expectedRent');
-    const existingItems = JSON.parse(localStorage.getItem('searches')) || [];
-    existingItems.push(getState().user);
-    localStorage.setItem('searches', JSON.stringify(existingItems));
-    const url = '/api/notify_user';
-    let formattedRent = '';
-    if (user.address.rentZestimate) {
-      formattedRent = formatCurrency(user.address.rentZestimate);
-    } else {
-      const { lowerRange, upperRange } = calcRentZestimate(user.address.zestimate);
-      formattedRent = `${formatCurrency(lowerRange)} - ${formatCurrency(upperRange)}`;
-    }
-    const response = await fetchPost({ url, body: {user, formattedRent}});
-    dispatch({ type: 'set user', user});
-    return response.status;
-  }),
-  onAddressSelect: async addressNode => {
-    const addressComponents = addressNode['address_components'];
-    const address = { formatted: addressNode.formatted_address };
-    addressComponents.forEach(
-      comp => {
-        if (comp.types.includes('street_number')) {
-          address.streetNumber = comp.long_name;
-        } else if (comp.types.includes('route')) {
-          address.streetName = comp.long_name;
-        } else if (comp.types.includes('locality')) {
-          address.city = comp.long_name;
-        } else if (comp.types.includes('administrative_area_level_1')) {
-          address.state = comp.long_name;
-        } else if (comp.types.includes('postal_code')) {
-          address.zip = comp.long_name;
-        }
-      }
-    );
-    const url = '/api/rent_zestimate';
-    const response = await fetchPost({ url, body: { address }});
-    if (response.status !== 200) {
-      dispatch({type: 'set user', user: { address: {} }});
-      return false;
-    };
-    const body = await response.json();
-    address['rentZestimate'] = body.rentZestimateAmount;
-    address['zestimate'] = body.zestimateAmount;
-    dispatch({type: 'set user', user: { address }});
-    return true;
-  }
 }))(reduxFormBound);

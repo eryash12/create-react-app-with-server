@@ -38,7 +38,7 @@ app.post('/api/rent_zestimate', async (req, res) => {
       if(!(rentZestimate || zestimateAmount)) return res.status(400).json({response});
       return res.status(200).json({ zestimateAmount, rentZestimateAmount });
     }
-    return res.status(400).json({response}); // Shouldnt send back the response but is easier to debug and see if rent zestimate is available 
+    return res.status(400).json({response}); // Shouldnt send back the response but is easier to debug and see if rent zestimate is available
   } catch(err) {
     res.status(500).json({ err: err.message });
   }

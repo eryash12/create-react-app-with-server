@@ -134,4 +134,56 @@ $font-color: #555555;
   .highlight-color {
     color: $primary-color;
   }
+
+  .expected-rent {
+    margin-top: 76px;
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    .er-image {
+      margin-bottom: 30px;
+    }
+
+    .er-desc {
+      font-size: 14px;
+      color: #AAAAAA;
+      width: 190px;
+    }
+
+    .er-currency {
+      font-size: 46px;
+      color: #555555;
+      margin: 20px 0 72px 0;
+    }
+
+    .er-headline {
+      font-size: 18px;
+      color: #555555;
+    }
+
+    .er-text2 {
+      width: 230px;
+      font-size: 14px;
+      color: #AAAAAA;
+    }
+    .er-form {
+      margin-top: 23px;
+    }
+    .seperator {
+      width: 217px;
+      border: 1px solid #E3E2E2;
+    }
+    input {
+      width:  70px;
+      font-size: 18px;
+      background-color: transparent;
+      border: 0px solid;
+      outline: none;
+      &::placeholder {
+        color: #CCCCCC;
+      }
+    }
+  }
 }
