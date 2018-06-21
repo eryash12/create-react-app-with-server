@@ -54,7 +54,7 @@ class Home extends React.Component {
   getHomeStyle = () => {
     const { step } = this.state;
     const base = {
-      minHeight: window.innerHeight
+      height: window.innerHeight
     }
     if (step === 'rent') {
       base['backgroundColor'] = "#fff";
@@ -77,9 +77,9 @@ class Home extends React.Component {
           <div className="grid-div">
             <Form step={this.state.step} onAddressSelect={onAddressSelect}/>
           </div>
-        </div>
-        <div className="footer" onClick={onSubmit}>
-          <div className="footer-text">{footerText}</div>
+          <div className="footer" onClick={onSubmit}>
+            <div className="footer-text">{footerText}</div>
+          </div>
         </div>
       </div>
     );
