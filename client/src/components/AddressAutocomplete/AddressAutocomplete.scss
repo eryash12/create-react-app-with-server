@@ -1,3 +1,4 @@
+$ipad: 769px;
 .address-autocomplete {
   position: relative;
   overflow: visible;
@@ -11,5 +12,16 @@
     > div {
       z-index: 2;
     }
+  }
+}
+
+.address-input {
+  width: 100vw;
+  border-bottom: 1px solid #EDEDED;
+  border-top: 1px solid #EDEDED;
+  @media(min-width: $ipad) {
+    max-width: 500px;
+    border: 1px solid #EDEDED;
+    border-radius: 5px;
   }
 }
