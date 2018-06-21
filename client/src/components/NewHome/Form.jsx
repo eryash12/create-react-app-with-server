@@ -1,7 +1,7 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
 import { connect } from 'react-redux';
-import { reduxForm, Field, formValueSelector } from 'redux-form';
+import { reduxForm, Field } from 'redux-form';
 import TextField from '../TextField/TextField';
 import { required, phone, email } from '../../utils/validations';
 import AddressAutocomplete from '../AddressAutocomplete';
@@ -46,19 +46,16 @@ class Form extends React.Component {
   imgWrap = (img) => (<img className="img-form" src={img}/>);
 
   renderPersonalDetails = () => {
-    const { invalid, submitting, pristine, handleSubmit, onSubmitPersonalDetails } = this.props;
-    const onClick = handleSubmit(() => this.setState({ activeStep: 1}, onSubmitPersonalDetails()));
     return(
       <div>
-        <form className="fields" onSubmit={onClick}>
-          <div className="full split">
-            <TextField img={this.imgWrap(firstnameImg)} className="full" name="firstName" placeholder="First name" validate={[required]}/>
-            <TextField className="full" name="lastName" placeholder="Last name" validate={[required]}/>
+        <form className="fields">
+          <div className="split">
+            <TextField img={this.imgWrap(firstnameImg)} name="firstName" placeholder="First name" validate={[required]}/>
+            <TextField name="lastName" placeholder="Last name" validate={[required]}/>
           </div>
           <TextField img={this.imgWrap(emailImg)} className="full" name="email" placeholder="Email" validate={[required, email]}/>
           <TextField img={this.imgWrap(passwordImg)} className="full" name="password" type="password" placeholder="Password" validate={[required, email]}/>
           <TextField img={this.imgWrap(phoneImg)} className="full" name="phone" type="tel" placeholder="Phone number" validate={[required, phone]}/>
-          {/* {this.submitBtn({ disabled: invalid || submitting || pristine, onClick }, 'Next')} */}
         </form>
         <div className="terms-and-conditions">
           <div className="text">By signing up, I agree to Beepi’s <span className="highlight-color">Terms of Service</span> and <span className="highlight-color">Privacy Policy</span>.</div>
@@ -67,27 +64,7 @@ class Form extends React.Component {
     )
   }
 
-  renderZestimate = (zestimate, rentZestimate) => {
-    if (!zestimate && !rentZestimate) return;
-    if(!rentZestimate) {
-      const { upperRange, lowerRange } = calcRentZestimate(zestimate);
-      return(
-        <div className="rent-zestimate">
-            Congratulations! based on the address you entered we were able to identify your rent zestimate as
-            {' '}<b>{formatCurrency(lowerRange)}</b> to <b>{formatCurrency(upperRange)}</b> approximately per month
-        </div>
-      )
-    }
-    return(
-      <div className="rent-zestimate">
-        Congratulations! based on the address you entered we were able to identify your rent zestimate as <b>{formatCurrency(rentZestimate)}</b>
-      </div>
-    );
-  }
-
   renderAddress = () => {
-    const { user: { address = {} } } = this.props;
-    const onClick = () => this.setState({activeStep: 2});
     return (
       <div>
         <AddressAutocomplete onAddressSelect={this.props.onAddressSelect} />
@@ -97,12 +74,17 @@ class Form extends React.Component {
 
   renderRent = () => {
     const { user: {address: {rentZestimate, zestimate}} } = this.props;
+    let displayZest = formatCurrency(rentZestimate) || `${calcRentZestimate(zestimate).lowerRange} - ${calcRentZestimate(zestimate).upperRange}`;
+    console.log(displayZest, Number.isNaN(displayZest), !displayZest);
+    if (displayZest === '$NaN' || !displayZest) {
+      displayZest = "???"
+    }
     return (
       <div className="expected-rent">
         <img className="er-image" src={successImg} />
         <div className="er-headline">Found your place!</div>
         <div className="er-desc">Here’s the estimate rate you’ll get for your property monthy guaranteed</div>
-        <div className="er-currency">{formatCurrency(rentZestimate) || `${calcRentZestimate(zestimate).lowerRange} - ${calcRentZestimate(zestimate).upperRange}`}</div>
+        <div className="er-currency">{displayZest}</div>
         <div className="er-text2">Do you expect a different amount? We’ll try to make it happen</div>
         <form className="er-form">
           <Field className="er-input" name="expectedRent" type="number" component="input" label="Expected Rent" placeholder="$5800"/>

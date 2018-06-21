@@ -31,7 +31,7 @@ class Home extends React.Component {
       }
     } else if (step === 'address') {
       return {
-        leftImg: <img src={backImg} className="cross-img"/>,
+        leftImg: <img onClick={() => this.setState({step: 'personalDetails'})} src={backImg} className="cross-img"/>,
         midText: 'Home Address',
         rightText: <img src={supportImg} className="cross-img"/>,
         footerText: 'ESTIMATE RENT',
@@ -39,7 +39,7 @@ class Home extends React.Component {
       }
     } else {
       return {
-        leftImg: <img src={backImg} className="cross-img"/>,
+        leftImg: <img onClick={() => this.setState({step: 'address'})} src={backImg} className="cross-img"/>,
         midText: 'Success',
         rightText: <img src={supportImg} className="cross-img"/>,
         footerText: 'DONE',
@@ -50,11 +50,22 @@ class Home extends React.Component {
       }
     }
   }
+
+  getHomeStyle = () => {
+    const { step } = this.state;
+    const base = {
+      minHeight: window.innerHeight
+    }
+    if (step === 'rent') {
+      base['backgroundColor'] = "#fff";
+    }
+    return base;
+  }
   render() {
     const { onAddressSelect } = this.props;
     const {leftImg, midText, rightText, footerText, onSubmit} = this.getHeaderProps(this.state.step);
     return (
-      <div className="home" style={this.state.step === 'rent' ? {backgroundColor: "#fff"} : {}}>
+      <div className="home" style={this.getHomeStyle()}>
         <div className="header" square={true} elevation={1}>
           <div className="left-header-box">
             {leftImg}
@@ -63,7 +74,7 @@ class Home extends React.Component {
           <div className="right-header-text">{rightText}</div>
         </div>
         <div className="canvas">
-          <div className="grid-div form-div">
+          <div className="grid-div">
             <Form step={this.state.step} onAddressSelect={onAddressSelect}/>
           </div>
         </div>
