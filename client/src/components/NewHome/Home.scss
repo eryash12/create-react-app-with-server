@@ -1,32 +1,46 @@
-$header-height: 50px;
+$header-height: 44px;
 $ipad: 769px;
-$primary-color: #3f51b5;
-$background-color: #f7f7f7;
+$primary-color: #009BFF;
+$background-color: #F7F7F7;
+$font-color: #555555;
 .home {
   min-height: 100vh;
   min-width: 100vw;
   background-color: $background-color;
-  padding-bottom: 10px;
+  font-size: 16px;
+  position: relative;
   div, span, input, nav, a, p {
     font-family: 'Open Sans', sans-serif !important;
+    box-sizing: border-box;
   }
 
   .header {
     height: $header-height;
     display: flex;
     align-items: center;
-    background: #333;
-    color: #fff;
-    border-radius: 0;
+    justify-content: space-between;
+    background: #fff;
+    color: $font-color;
+    padding: 0 13px;
+    margin-bottom: 8px;
+    border-bottom: 1px solid #EAEAEA;
   }
 
-  .intials-box {
-    margin-left: 10px;
-    border: 2px solid #fff;
-    border-radius: 4px;
-    padding: 5px;
-    margin-right: 10px;
-    font-weight: bold;
+  .cross-img {
+    height: 30px;
+    width: 30px;
+  }
+
+  .footer {
+    position: absolute;
+    bottom: 0;
+    background-color: $primary-color;
+    color: #fff;
+    width: 100vw;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   .canvas {
@@ -38,33 +52,32 @@ $background-color: #f7f7f7;
     }
   }
 
-  .grid-div {
-    margin: 10px 10px 0 10px;
-
-    @media(min-width: $ipad) {
-      margin: 10px 0 0 10px;
-      height: 600px;
-      width: 49vw;
-    }
-  }
-
-  .form-div {
-    min-height: 500px;
-    order: 1;
-    @media(min-width: $ipad) {
-      height: 600px;
-      order: 2;
-    }
-  }
-
   .fields {
     display: flex;
     flex-flow: column;
   }
 
-  .full {
-    margin-bottom: 10px;
-    max-width: 290px;
+  .split {
+    display: flex;
+    > div {
+      width: 50%;
+      border-bottom: none !important;
+    }
+  }
+
+  .terms-and-conditions {
+    color: #AAAAAA;
+    text-align: center;
+    width: 100vw;
+    margin: 28px auto;
+    font-size: 14px;
+    width: 240px;
+  }
+
+  .img-form {
+    height: 30px;
+    width: 30px;
+    margin-left: 15px;
   }
 
   .submit-btn {
@@ -120,6 +133,5 @@ $background-color: #f7f7f7;
 
   .highlight-color {
     color: $primary-color;
-    font-weight: bold;
   }
 }
