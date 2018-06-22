@@ -32,7 +32,7 @@ export const formatCurrency = amt => numbro(parseInt(amt, 10)).formatCurrency({ 
 
 const normalizePhone = (value, previousValue) => {
   if (!value) {
-    return value
+    return value;
   }
   const onlyNums = value.replace(/[^\d]/g, '')
   if (!previousValue || value.length > previousValue.length) {
@@ -102,7 +102,7 @@ class Form extends React.Component {
   renderPersonalDetails = () => {
     return(
       <div>
-        <form className="fields">
+        <form className="fields" onSubmit={this.props.handleSubmit(this.props.onSubmit)}>
           <div className="split">
             <TextField img={this.imgWrap(firstnameImg)} name="firstName" placeholder="First name" validate={[required]}/>
             <TextField name="lastName" placeholder="Last name" validate={[required]}/>
@@ -110,6 +110,7 @@ class Form extends React.Component {
           <TextField img={this.imgWrap(emailImg)} className="full" name="email" placeholder="Email" validate={[required]}/>
           <TextField img={this.imgWrap(passwordImg)} className="full" name="password" type="password" placeholder="Password" validate={[required]}/>
           <TextField img={this.imgWrap(phoneImg)} className="full" name="phone" type="tel" placeholder="Phone number" normalize={normalizePhone} validate={[required]}/>
+          <button type="submit" style={{display: 'none'}} />
         </form>
         <div className="terms-and-conditions">
           <div className="text">By signing up, I agree to Beepi’s <span className="highlight-color">Terms of Service</span> and <span className="highlight-color">Privacy Policy</span>.</div>
@@ -120,9 +121,12 @@ class Form extends React.Component {
 
   renderAddress = () => {
     return (
-      <div>
-        <AddressAutocomplete onAddressSelect={this.props.onAddressSelect} />
-      </div>
+      <form onSubmit={this.props.handleSubmit(this.props.onSubmit)} >
+        <div>
+          <AddressAutocomplete onAddressSelect={this.props.onAddressSelect} />
+        </div>
+        <button type="submit" style={{display: 'none'}} />
+      </form>
     );
   };
 
@@ -139,8 +143,9 @@ class Form extends React.Component {
         <div className="er-desc">Here’s the estimate rate you’ll get for your property monthy guaranteed</div>
         <div className="er-currency">{displayZest}</div>
         <div className="er-text2">Do you expect a different amount? We’ll try to make it happen</div>
-        <form className="er-form">
+        <form className="er-form" onSubmit={this.props.handleSubmit(this.props.onSubmit)}>
           <Field className="er-input" name="expectedRent" component={renderAutosize} label="Expected Rent" placeholder="$5800" validate={[required]} normalize={normalizeCurrency}/>
+          <button type="submit" style={{display: 'none'}} />
         </form>
         <div className="seperator" />
       </div>
