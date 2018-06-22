@@ -11,7 +11,6 @@ import emailImg from './img/email.png';
 import firstnameImg from './img/firstname.png';
 import passwordImg from './img/password.png';
 import successImg from './img/success.svg';
-import NumberFormat from 'react-number-format';
 import { createNumberMask, createTextMask } from 'redux-form-input-masks';
 
 const currencyMask = createNumberMask({
