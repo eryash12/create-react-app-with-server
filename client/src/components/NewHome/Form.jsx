@@ -162,7 +162,6 @@ class Form extends React.Component {
     const {onSubmit, footerText, invalid, submitting, pristine, step, user = {}} = this.props;
     const userAddress = user.address || {};
     const zestimate = userAddress.zestimate || userAddress.rentZestimate;
-    console.log(zestimate);
     const footerDisabled = step === 'address' ? !zestimate : (invalid || submitting || pristine);
     const footerClass = footerDisabled ? "footer disabled" : "footer";
     return (
