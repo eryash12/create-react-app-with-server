@@ -12,6 +12,7 @@ import firstnameImg from './img/firstname.png';
 import passwordImg from './img/password.png';
 import successImg from './img/success.svg';
 import { createNumberMask, createTextMask } from 'redux-form-input-masks';
+import AutosizeInput from 'react-input-autosize';
 
 const currencyMask = createNumberMask({
   prefix: '$ ',
@@ -22,6 +23,13 @@ const currencyMask = createNumberMask({
 const phoneMask = createTextMask({
   pattern: '(999) 999-9999',
 });
+
+const renderAutosize = ({ input, label, ...custom }) => (
+  <AutosizeInput
+    {...input}
+    {...custom}
+  />
+);
 
 
 export const calcRentZestimate = (zestimate) => {
@@ -99,7 +107,7 @@ class Form extends React.Component {
         <div className="er-currency">{displayZest}</div>
         <div className="er-text2">Do you expect a different amount? We’ll try to make it happen</div>
         <form className="er-form">
-          <Field className="er-input" name="expectedRent" component="input" label="Expected Rent" placeholder="$5800" {...currencyMask}/>
+          <Field className="er-input" name="expectedRent" component={renderAutosize} label="Expected Rent" placeholder="$5800" {...currencyMask}/>
         </form>
         <div className="seperator" />
       </div>
