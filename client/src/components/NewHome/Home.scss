@@ -3,6 +3,7 @@ $ipad: 769px;
 $primary-color: #009BFF;
 $background-color: #F7F7F7;
 $font-color: #555555;
+$form-width-desktop: 450px;
 .home {
   min-width: 100vw;
   background-color: $background-color;
@@ -43,7 +44,7 @@ $font-color: #555555;
     align-items: center;
     @media(min-width: $ipad) {
       position: unset;
-      width: 440px;
+      width: $form-width-desktop;
       margin-top: 50px;
     }
   }
@@ -68,6 +69,7 @@ $font-color: #555555;
     @media(min-width: $ipad) {
       border-radius: 25px;
       overflow: hidden;
+      width: 450px;
     }
   }
 

@@ -1,3 +1,4 @@
+$form-width-desktop: 450px;
 $ipad: 769px;
 .address-autocomplete {
   position: relative;
@@ -20,8 +21,8 @@ $ipad: 769px;
   border-bottom: 1px solid #EDEDED;
   border-top: 1px solid #EDEDED;
   @media(min-width: $ipad) {
-    max-width: 500px;
+    width: $form-width-desktop;
     border: 1px solid #EDEDED;
-    border-radius: 5px;
+    border-radius: 25px;
   }
 }

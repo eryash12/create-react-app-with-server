@@ -11,6 +11,19 @@ import emailImg from './img/email.png';
 import firstnameImg from './img/firstname.png';
 import passwordImg from './img/password.png';
 import successImg from './img/success.svg';
+import NumberFormat from 'react-number-format';
+import { createNumberMask, createTextMask } from 'redux-form-input-masks';
+
+const currencyMask = createNumberMask({
+  prefix: '$ ',
+  locale: 'en-US',
+  placeholder: '$5000'
+})
+
+const phoneMask = createTextMask({
+  pattern: '(999) 999-9999',
+});
+
 
 export const calcRentZestimate = (zestimate) => {
   const calcRentZestimate = (0.05 * parseInt(zestimate, 10))/12;
@@ -55,7 +68,7 @@ class Form extends React.Component {
           </div>
           <TextField img={this.imgWrap(emailImg)} className="full" name="email" placeholder="Email" validate={[required, email]}/>
           <TextField img={this.imgWrap(passwordImg)} className="full" name="password" type="password" placeholder="Password" validate={[required, email]}/>
-          <TextField img={this.imgWrap(phoneImg)} className="full" name="phone" type="tel" placeholder="Phone number" validate={[required, phone]}/>
+          <TextField img={this.imgWrap(phoneImg)} className="full" name="phone" type="tel" placeholder="Phone number" {...phoneMask}/>
         </form>
         <div className="terms-and-conditions">
           <div className="text">By signing up, I agree to Beepi’s <span className="highlight-color">Terms of Service</span> and <span className="highlight-color">Privacy Policy</span>.</div>
@@ -87,7 +100,7 @@ class Form extends React.Component {
         <div className="er-currency">{displayZest}</div>
         <div className="er-text2">Do you expect a different amount? We’ll try to make it happen</div>
         <form className="er-form">
-          <Field className="er-input" name="expectedRent" type="number" component="input" label="Expected Rent" placeholder="$5800"/>
+          <Field className="er-input" name="expectedRent" component="input" label="Expected Rent" placeholder="$5800" {...currencyMask}/>
         </form>
         <div className="seperator" />
       </div>

@@ -6362,6 +6362,10 @@ reduce-function-call@^1.0.1:
   dependencies:
     balanced-match "^0.4.2"
 
+redux-form-input-masks@^1.1.4:
+  version "1.1.4"
+  resolved "https://registry.yarnpkg.com/redux-form-input-masks/-/redux-form-input-masks-1.1.4.tgz#1cc8a6e6a2de218b62e589d1a3c7e6df76c07e04"
+
 redux-form-material-ui@^5.0.0-beta.3:
   version "5.0.0-beta.3"
   resolved "https://registry.yarnpkg.com/redux-form-material-ui/-/redux-form-material-ui-5.0.0-beta.3.tgz#448121031ffce11886d33c93155fbab51b31a6b8"
