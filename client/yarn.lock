@@ -6161,6 +6161,13 @@ react-input-autosize@^2.2.1:
   dependencies:
     prop-types "^15.5.8"
 
+react-input-mask@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/react-input-mask/-/react-input-mask-2.0.2.tgz#1726b16315eeedcb005d97b4f76d3a03c3d69df8"
+  dependencies:
+    invariant "^2.2.4"
+    warning "^3.0.0"
+
 react-jss@^8.1.0:
   version "8.5.1"
   resolved "https://registry.yarnpkg.com/react-jss/-/react-jss-8.5.1.tgz#f97c72f6a1c86aa6408932a2a2836ce40c0ab9fc"

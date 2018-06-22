@@ -24,6 +24,21 @@ $form-width-desktop: 450px;
     padding: 0 13px;
     margin-bottom: 8px;
     border-bottom: 1px solid #EAEAEA;
+    > div {
+      min-width: 70px;
+    }
+  }
+
+  .left-header-box {
+    text-align:left;
+  }
+
+  .mid-header-text {
+    text-align: center;
+  }
+
+  .right-header-text {
+    text-align: right;
   }
 
   .cross-img {
@@ -48,6 +63,10 @@ $form-width-desktop: 450px;
       margin-top: 50px;
       border-radius: 25px;
     }
+  }
+
+  .disabled {
+    opacity: 0.5;
   }
 
   .canvas {

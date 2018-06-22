@@ -66,7 +66,7 @@ class Home extends React.Component {
     const {leftImg, midText, rightText, footerText, onSubmit} = this.getHeaderProps(this.state.step);
     return (
       <div className="home" style={this.getHomeStyle()}>
-        <div className="header" square={true} elevation={1}>
+        <div className="header">
           <div className="left-header-box">
             {leftImg}
           </div>
@@ -74,12 +74,7 @@ class Home extends React.Component {
           <div className="right-header-text">{rightText}</div>
         </div>
         <div className="canvas">
-          <div className="grid-div">
-            <Form step={this.state.step} onAddressSelect={onAddressSelect}/>
-          </div>
-          <div className="footer" onClick={onSubmit}>
-            <div className="footer-text">{footerText}</div>
-          </div>
+          <Form step={this.state.step} onAddressSelect={onAddressSelect} onSubmit={onSubmit} footerText={footerText}/>
         </div>
       </div>
     );
@@ -93,7 +88,6 @@ export default connect((state) => ({
 }), (dispatch) => ({
   onSubmitPersonalDetails: () => dispatch((dispatch, getState) => {
     const state = getState();
-    console.log(state);
     dispatch({ type: 'set user', user: { ...selector(state, 'firstName', 'lastName', 'phone', 'email') }});
   }),
   onSubmitExpectedRent: () => dispatch(async (dispatch, getState) => {
