@@ -84,25 +84,14 @@ class Form extends React.Component {
     />);
   }
 
-  submitBtn = (props, text) => (
-    <Button
-      className="submit-btn"
-      variant="contained"
-      color="primary"
-      {
-        ...props
-      }
-    >
-      {text}
-    </Button>
-  )
-
   imgWrap = (img) => (<img className="img-form" src={img}/>);
+
+  hiddenButton = () => <button type="submit" style={{position: 'absolute', zIndex: -1, opacity: 0}} />
 
   renderPersonalDetails = () => {
     return(
       <div>
-        <form className="fields" onSubmit={this.props.handleSubmit(this.props.onSubmit)}>
+        <form className="fields" action="/" onSubmit={this.props.handleSubmit(this.props.onSubmit)}>
           <div className="split">
             <TextField img={this.imgWrap(firstnameImg)} name="firstName" placeholder="First name" validate={[required]}/>
             <TextField name="lastName" placeholder="Last name" validate={[required]}/>
@@ -110,7 +99,7 @@ class Form extends React.Component {
           <TextField img={this.imgWrap(emailImg)} className="full" name="email" placeholder="Email" validate={[required]}/>
           <TextField img={this.imgWrap(passwordImg)} className="full" name="password" type="password" placeholder="Password" validate={[required]}/>
           <TextField img={this.imgWrap(phoneImg)} className="full" name="phone" type="tel" placeholder="Phone number" normalize={normalizePhone} validate={[required]}/>
-          <button type="submit" style={{display: 'none'}} />
+          {this.hiddenButton()}
         </form>
         <div className="terms-and-conditions">
           <div className="text">By signing up, I agree to Beepi’s <span className="highlight-color">Terms of Service</span> and <span className="highlight-color">Privacy Policy</span>.</div>
@@ -125,7 +114,7 @@ class Form extends React.Component {
         <div>
           <AddressAutocomplete onAddressSelect={this.props.onAddressSelect} />
         </div>
-        <button type="submit" style={{display: 'none'}} />
+        {this.hiddenButton()}
       </form>
     );
   };
@@ -145,7 +134,7 @@ class Form extends React.Component {
         <div className="er-text2">Do you expect a different amount? We’ll try to make it happen</div>
         <form className="er-form" onSubmit={this.props.handleSubmit(this.props.onSubmit)}>
           <Field className="er-input" name="expectedRent" component={renderAutosize} label="Expected Rent" placeholder="$5800" validate={[required]} normalize={normalizeCurrency}/>
-          <button type="submit" style={{display: 'none'}} />
+          {this.hiddenButton()}
         </form>
         <div className="seperator" />
       </div>
@@ -168,7 +157,7 @@ class Form extends React.Component {
     const userAddress = user.address || {};
     const zestimate = userAddress.zestimate || userAddress.rentZestimate;
     const footerDisabled = step === 'address' ? !zestimate : (invalid || submitting || pristine);
-    const footerClass = footerDisabled ? "footer disabled" : "footer";
+    const footerClass = footerDisabled ? "footer disabled" : "footer active";
     return (
       [
         <div key="1" className="grid-div">
