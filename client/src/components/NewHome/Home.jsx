@@ -8,14 +8,18 @@ import supportImg from './img/support.png';
 import { calcRentZestimate, formatCurrency } from './Form';
 import { fetchPost } from '../../utils/fetch';
 import { formValueSelector } from 'redux-form';
+import _debounce from 'lodash/debounce';
 
 class Home extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       step: 'personalDetails',
+      browserHeight: this.getHeight(),
     }
   }
+
+  getHeight = () => { return window.innerHeight - 52; }
 
   getHeaderProps = (step) => {
     if (step === 'personalDetails') {
@@ -51,11 +55,17 @@ class Home extends React.Component {
     }
   }
 
+  componentDidMount() {
+    window.addEventListener("resize", _debounce(this.updateDimensions, 150));
+  }
+
+  updateDimensions = () => {
+    this.setState({ browserHeight: this.getHeight() });
+  }
+
   getHomeStyle = () => {
     const { step } = this.state;
-    const base = {
-      height: window.innerHeight
-    }
+    const base = {};
     if (step === 'rent') {
       base['backgroundColor'] = "#fff";
     }
@@ -73,7 +83,7 @@ class Home extends React.Component {
           <div className="mid-header-text">{midText}</div>
           <div className="right-header-text">{rightText}</div>
         </div>
-        <div className="canvas">
+        <div className="canvas" style={{minHeight: this.state.browserHeight}}>
           <Form step={this.state.step} onAddressSelect={onAddressSelect} onSubmit={onSubmit} footerText={footerText}/>
         </div>
       </div>
@@ -130,7 +140,7 @@ export default connect((state) => ({
     const url = '/api/rent_zestimate';
     const response = await fetchPost({ url, body: { address }});
     if (response.status !== 200) {
-      dispatch({type: 'set user', user: { address: {} }});
+      dispatch({type: 'set user', user: { address }});
       return false;
     };
     const body = await response.json();

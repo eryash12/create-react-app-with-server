@@ -35,9 +35,7 @@ class AddressAutocomplete extends React.Component {
             <div>
               <TextField
                 className = "address-input"
-                error={state.error !== ''}
                 reduxForm={false}
-                helperText={state.error}
                 {...getInputProps({
                   placeholder: 'Search for Address',
                 })}

@@ -1,5 +1,4 @@
 import React from 'react';
-import Button from '@material-ui/core/Button';
 import { connect } from 'react-redux';
 import { reduxForm, Field } from 'redux-form';
 import TextField from '../TextField/TextField';
@@ -121,7 +120,12 @@ class Form extends React.Component {
 
   renderRent = () => {
     const { user: {address: {rentZestimate, zestimate}} } = this.props;
-    let displayZest = formatCurrency(rentZestimate) || `${calcRentZestimate(zestimate).lowerRange} - ${calcRentZestimate(zestimate).upperRange}`;
+    let displayZest;
+    if (rentZestimate) {
+      displayZest = formatCurrency(rentZestimate)
+    } else {
+      displayZest = `${formatCurrency(calcRentZestimate(zestimate).lowerRange)} - ${formatCurrency(calcRentZestimate(zestimate).upperRange)}`
+    }
     if (displayZest === '$NaN' || !displayZest) {
       displayZest = "???"
     }
@@ -155,8 +159,7 @@ class Form extends React.Component {
   render() {
     const {onSubmit, footerText, invalid, submitting, pristine, step, user = {}} = this.props;
     const userAddress = user.address || {};
-    const zestimate = userAddress.zestimate || userAddress.rentZestimate;
-    const footerDisabled = step === 'address' ? !zestimate : (invalid || submitting || pristine);
+    const footerDisabled = step === 'address' ? !userAddress.formatted : (invalid || submitting || pristine);
     const footerClass = footerDisabled ? "footer disabled" : "footer active";
     return (
       [
