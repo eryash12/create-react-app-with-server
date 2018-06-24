@@ -123,7 +123,7 @@ class Form extends React.Component {
     let displayZest;
     if (rentZestimate) {
       displayZest = formatCurrency(rentZestimate)
-    } else {
+    } else if (zestimate){
       displayZest = `${formatCurrency(calcRentZestimate(zestimate).lowerRange)} - ${formatCurrency(calcRentZestimate(zestimate).upperRange)}`
     }
     if (displayZest === '$NaN' || !displayZest) {
